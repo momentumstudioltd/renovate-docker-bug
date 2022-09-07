@@ -7,4 +7,4 @@ Renovate should be tracking my private Docker images used in `.github/workflows/
 
 ## Actual Behaviour
 
-Renovate shows an error on the Dependency Dashboard that states it cannot find our private docker images. They are hosted on GitHub Packages privately but we're using the official Renovate app so Renovate should automatically be able to access them.
+Renovate shows an error on the [Dependency Dashboard](https://github.com/momentumstudioltd/renovate-docker-bug/issues/1) that states it cannot find our private docker images. They are hosted on GitHub Packages privately but we're using the official Renovate app so Renovate should automatically be able to access them.
