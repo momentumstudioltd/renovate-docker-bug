@@ -1,0 +1,77 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    container:
+      image: docker://ghcr.io/momentumstudioltd/laravel:7.4
+      credentials:
+        username: Jamesking56
+        password: ${{ secrets.WRITE_GITHUB_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v3.0.2
+      - uses: actions/checkout@v3.0.2
+        with:
+          fetch-depth: 0
+          repository: momentumstudioltd/github-actions
+          path: .github/actions
+          token: ${{ secrets.WRITE_GITHUB_TOKEN }}
+      - uses: ./.github/actions/laravel-lint
+        with:
+          envy: 'false'
+
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    container:
+      image: docker://ghcr.io/momentumstudioltd/laravel:7.4
+      credentials:
+        username: Jamesking56
+        password: ${{ secrets.WRITE_GITHUB_TOKEN }}
+    env:
+      APP_DEBUG: true
+      APP_KEY: base64:LRzu4MK+VG+TRlCPhDVkYeoY+b7T+xl+NhPBCUZViWE=
+      DB_CONNECTION: mysql
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_USERNAME: root
+      DB_PASSWORD: ''
+      DB_DATABASE: laravel
+
+    services:
+      db:
+        image: mariadb:10.4
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+          MYSQL_DATABASE: laravel
+        ports:
+          - 3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    steps:
+      - uses: actions/checkout@v3.0.2
+      - uses: actions/checkout@v3.0.2
+        with:
+          fetch-depth: 0
+          repository: momentumstudioltd/github-actions
+          path: .github/actions
+          token: ${{ secrets.WRITE_GITHUB_TOKEN }}
+      - uses: ./.github/actions/laravel-test
+        env:
+          CODACY_API_TOKEN: ${{ secrets.CODACY_API_TOKEN }}
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
