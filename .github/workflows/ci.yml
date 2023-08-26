@@ -24,8 +24,8 @@ jobs:
         password: ${{ secrets.WRITE_GITHUB_TOKEN }}
 
     steps:
-      - uses: actions/checkout@v3.0.2
-      - uses: actions/checkout@v3.0.2
+      - uses: actions/checkout@v3.6.0
+      - uses: actions/checkout@v3.6.0
         with:
           fetch-depth: 0
           repository: momentumstudioltd/github-actions
@@ -64,8 +64,8 @@ jobs:
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
-      - uses: actions/checkout@v3.0.2
-      - uses: actions/checkout@v3.0.2
+      - uses: actions/checkout@v3.6.0
+      - uses: actions/checkout@v3.6.0
         with:
           fetch-depth: 0
           repository: momentumstudioltd/github-actions
